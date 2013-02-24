@@ -32,7 +32,7 @@ Configuration
 
     Bugsnag::setReleaseStage("development");
 
-3. Configure at Administer > Configuration > Development > Bugsnag (requires
+3. Configure at Administer > Site Configuration > Bugsnag (requires
    administer site configuration permission).
 4. Choose minimum severity threshhold for watchdog reporting.
 
