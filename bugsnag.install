@@ -13,13 +13,13 @@ function bugsnag_requirements($phase) {
 
   if ($phase == 'runtime') {
     $t = get_t();
-    $library = libraries_detect('bugsnag');
+    $library = _bugsnag_load_library();
 
     $requirements['bugsnag'] = array(
       'title' => $t('Bugsnag library'),
-      'value' => $library['installed'] ? $t('Installed') : $t('Not installed'),
-      'description' => $library['installed'] ? $t('Download Bugsnag to sites/all/libraries') : NULL,
-      'severity' => $library['installed'] ? REQUIREMENT_OK : REQUIREMENT_ERROR,
+      'value' => $library ? $t('Installed') : $t('Not installed'),
+      'description' => !$library ? $t('Download Bugsnag to sites/all/libraries') : NULL,
+      'severity' => $library ? REQUIREMENT_OK : REQUIREMENT_ERROR,
     );
   }
 

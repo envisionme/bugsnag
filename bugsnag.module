@@ -10,7 +10,7 @@
  */
 function bugsnag_menu() {
   $items = array();
-  $items['admin/config/development/bugsnag'] = array(
+  $items['admin/settings/bugsnag'] = array(
     'title' => 'Bugsnag',
     'description' => 'Integrate with Bugsnag.',
     'page callback' => 'drupal_get_form',
@@ -26,8 +26,8 @@ function bugsnag_menu() {
  * Page callback for Bugsnap settings form.
  */
 function bugsnag_form() {
-  $library = libraries_detect('bugsnag');
-  $description = $library['installed'] ? t('Track errors with Bugsnag.') : '<span class="warning">' . t('You must install the Bugsnag library') . '</span>';
+  $library = libraries_get_path('bugsnag');
+  $description = isset($library) ? t('Track errors with Bugsnag.') : '<span class="warning">' . t('You must install the Bugsnag library') . '</span>';
 
   $options = _bugsnag_severity_list();
 
@@ -77,10 +77,33 @@ function bugsnag_watchdog($log_entry) {
   $type = $log_entry['type'];
   $message = $log_entry['message'];
 
-  libraries_load('bugsnag');
+  _bugsnag_load_library('bugsnag');
   Bugsnag::notifyError($severity, $type . ': ' . $message);
 }
 
+/**
+ * Load Bugsnag library.
+ */
+function _bugsnag_load_library() {
+   if (!class_exists('Bugsnag')) {
+    if (!($library_path = _bugsnag_get_path())) {
+      return FALSE;
+    }
+    require_once './'. $library_path .'/lib/bugsnag.php';
+  }
+  return TRUE;
+}
+
+/**
+ * Get path to Bugsnag library.
+ */
+function _bugsnag_get_path() {
+  $library_path = libraries_get_path('bugsnag');
+  if (!file_exists('./'. $library_path .'/lib/bugsnag.php')) {
+    return FALSE;
+  }
+  return $library_path;
+}
 
 /**
  * Return watchdog severity options.
