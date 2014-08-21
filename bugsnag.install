@@ -25,3 +25,14 @@ function bugsnag_requirements($phase) {
 
   return $requirements;
 }
+
+/**
+ * Implements hook_uninstall().
+ */
+function bugsnag_uninstall() {
+  variable_del('bugsnag_limit');
+  variable_del('bugsnag_apikey');
+  variable_del('bugsnag_release_stage');
+  variable_del('bugsnag_project_root');
+  variable_del('bugsnag_app_version');
+}
