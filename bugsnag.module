@@ -96,6 +96,10 @@ function bugsnag_libraries_info() {
  * Implements hook_watchdog().
  */
 function bugsnag_watchdog($log_entry) {
+  if (!_bugsnag_load_library()) {
+    return;
+  }
+
   $bugsnag_limit = variable_get('bugsnag_limit', WATCHDOG_ERROR);
   $library = libraries_get_path('bugsnag-php');
 
